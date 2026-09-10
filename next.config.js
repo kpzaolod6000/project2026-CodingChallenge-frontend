@@ -1,8 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
-    NEXT_PUBLIC_API_KEY: process.env.NEXT_PUBLIC_API_KEY || 'coding-challenge',
+  output: 'export',
+  // Si tu repositorio se llama "frontend-matrix" y la URL en GitHub Pages es
+  // https://tu-usuario.github.io/frontend-matrix/ , descomenta la siguiente línea:
+  // basePath: '/frontend-matrix',
+  images: {
+    unoptimized: true,
   },
 };
 
