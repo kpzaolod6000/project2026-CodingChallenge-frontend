@@ -1,9 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  // Si tu repositorio se llama "frontend-matrix" y la URL en GitHub Pages es
-  // https://tu-usuario.github.io/frontend-matrix/ , descomenta la siguiente línea:
-  // basePath: '/frontend-matrix',
+  // Debe coincidir exactamente con el nombre de tu repositorio en GitHub:
+  basePath: '/project2026-CodingChallenge-frontend',
   images: {
     unoptimized: true,
   },
