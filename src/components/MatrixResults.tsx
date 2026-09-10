@@ -6,21 +6,78 @@ interface MatrixResultsProps {
   results: MatrixResponse;
 }
 
+function toFraction(value: number): string {
+  if (value === 0) return '0';
+  if (Number.isInteger(value)) return value.toString();
+
+  const sign = value < 0 ? '-' : '';
+  const abs = Math.abs(value);
+
+  const commonFractions: [number, string][] = [
+    [1/6, '1/6'],
+    [1/5, '1/5'],
+    [1/4, '1/4'],
+    [1/3, '1/3'],
+    [1/2, '1/2'],
+    [2/3, '2/3'],
+    [3/4, '3/4'],
+    [5/6, '5/6'],
+    [1/Math.SQRT2, '1/√2'],
+    [1/Math.sqrt(3), '1/√3'],
+    [1/Math.sqrt(5), '1/√5'],
+    [Math.SQRT2, '√2'],
+    [Math.sqrt(3), '√3'],
+    [Math.sqrt(5), '√5'],
+    [Math.PI, 'π'],
+    [Math.E, 'e'],
+  ];
+
+  for (const [val, frac] of commonFractions) {
+    if (Math.abs(abs - val) < 0.0001) return sign + frac;
+  }
+
+  const maxDenom = 1000;
+  let bestNum = Math.round(abs * 1000);
+  let bestDenom = 1000;
+  let bestErr = Math.abs(abs - bestNum / bestDenom);
+
+  for (let d = 1; d <= maxDenom; d++) {
+    const n = Math.round(abs * d);
+    const err = Math.abs(abs - n / d);
+    if (err < bestErr) {
+      bestNum = n;
+      bestDenom = d;
+      bestErr = err;
+    }
+    if (bestErr < 0.0001) break;
+  }
+
+  if (bestDenom === 1) return sign + bestNum.toString();
+  return `${sign}${bestNum}/${bestDenom}`;
+}
+
 function MatrixTable({ matrix, title }: { matrix: number[][]; title: string }) {
   return (
     <div>
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
       <div className="overflow-x-auto">
         <table className="border-collapse border border-gray-300">
+          <thead>
+            <tr>
+              <th className="px-3 py-1 border border-gray-300 text-xs text-gray-500">Decimal</th>
+              <th className="px-3 py-1 border border-gray-300 text-xs text-gray-500">Fracción</th>
+            </tr>
+          </thead>
           <tbody>
             {matrix.map((row, i) => (
               <tr key={i}>
                 {row.map((value, j) => (
                   <td
                     key={j}
-                    className="px-4 py-2 border border-gray-300 text-center"
+                    className="px-2 py-1 border border-gray-300 text-center"
                   >
-                    {typeof value === 'number' ? value.toFixed(4) : value}
+                    <div className="text-sm">{typeof value === 'number' ? value.toFixed(4) : value}</div>
+                    <div className="text-xs text-gray-500">{typeof value === 'number' ? toFraction(value) : value}</div>
                   </td>
                 ))}
               </tr>
