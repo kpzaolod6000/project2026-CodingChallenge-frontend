@@ -20,7 +20,7 @@ export default function Home() {
       setResults(response);
     } catch (err) {
       const apiError = err as ApiError;
-      setError(apiError.error || 'Error al procesar la matriz');
+      setError(apiError.error || ' -- Error al procesar la matriz --');
     } finally {
       setIsLoading(false);
     }
